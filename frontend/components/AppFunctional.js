@@ -5,7 +5,7 @@ const initialState = {
   x: 2,
   y: 2,
   steps: 0,
-  email: 'gary91@gmail.com'
+  email: ''
 }
 
 export default function AppFunctional(props) {
@@ -152,10 +152,20 @@ export default function AppFunctional(props) {
       console.log('board: ', board)
       console.log(resp.data.message);
       setError(resp.data.message);
-      
+      setBoard({
+        ...board,
+        email: ''
+      })
     })
     .catch(error => {
-      setError(`${board.email} failure #23`)
+      if( board.email === ''){
+        setError('Ouch: email is required')
+      }else if(board.email[board.email.length-4] !== '.'){
+        setError('Ouch: email must be a valid email');
+      }else{
+        setError(`${board.email} failure #71`)
+      }
+      
     })
   }
 
@@ -163,7 +173,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates: ({board.x}, {board.y})</h3>
-        <h3 id="steps">You moved {board.steps} time</h3>
+        <h3 id="steps">You moved {board.steps} time{board.steps !== 1 ? 's' : ''}</h3>
       </div>
       <div id="grid">
         <div className="square"></div>
@@ -187,7 +197,7 @@ export default function AppFunctional(props) {
         <button id="reset" onClick={handleResetClick}>reset</button>
       </div>
       <form>
-        <input onChange={handleChange} id="email" type="email" placeholder="type email"></input>
+        <input value={board.email} onChange={handleChange} id="email" type="email" placeholder="type email"></input>
         <input id="submit" type="submit" onClick={handleSubmit}></input>
       </form>
     </div>

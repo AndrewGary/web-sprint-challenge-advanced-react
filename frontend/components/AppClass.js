@@ -164,12 +164,25 @@ export default class AppClass extends React.Component {
       })
     })
     .catch(error => {
+      if(this.state.email === '')
+      {
+        this.setState({
+          ...this.state,
+          error: 'Ouch: email is required'
+        })
+      }else if(this.state.email[this.state.email.length-4] !== '.'){
+        this.setState({
+          ...this.state,
+          error: 'Ouch: email must be a valid email'
+        })
+      }else{
       console.log('error: ', error);
       this.setState({
         ...this.state,
-        error: `${this.state.email} failure #23`,
+        error: `${this.state.email} failure #71`,
         email: ''
       })
+    }
     })
 
   }
@@ -181,7 +194,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({this.state.x}, {this.state.y})</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">You moved {this.state.steps} time{this.state.steps !== 1 ? 's' : ''}</h3>
         </div>
         <div id="grid">
           <div className="square"></div>
@@ -205,7 +218,7 @@ export default class AppClass extends React.Component {
           <button onClick={this.handleReset} id="reset">reset</button>
         </div>
         <form>
-          <input onChange={this.handleChange} id="email" type="email" placeholder="type email"></input>
+          <input value={this.state.email}onChange={this.handleChange} id="email" type="email" placeholder="type email"></input>
           <input onClick={this.handleSubmit} id="submit" type="submit"></input>
         </form>
       </div>
