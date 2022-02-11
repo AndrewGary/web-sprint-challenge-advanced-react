@@ -13,6 +13,10 @@ export default function AppFunctional(props) {
   const [ board, setBoard] = useState(initialState)
   const [ error, setError ] = useState('');
 
+  useEffect(() => {
+    setActive(board.x, board.y)
+  }, [board])
+  
   const setActive = (x, y) => {
     const grid = document.getElementsByClassName('square');
 
@@ -62,10 +66,6 @@ export default function AppFunctional(props) {
       grid[8].textContent = 'B'
     }
   }
-
-  useEffect(() => {
-    setActive(board.x, board.y)
-  }, [board])
 
   const handleClick = (e) => {
     switch(e.target.textContent){

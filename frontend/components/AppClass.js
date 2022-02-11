@@ -68,76 +68,72 @@ export default class AppClass extends React.Component {
        }
   }
 
-  handleUpClick = () => {
-    console.log('handleUpClick');
-    if(this.state.y === 1){
-      this.setState({
-        ...this.state,
-        error: "You can't go up"
-      })
-    }else{
-      this.setState({
-        ...this.state,
-        error: '',
-        y: this.state.y -1,
-        steps: this.state.steps+1
-      })
-    }
-  }
-
-  handleDownClick = () => {
-    console.log('handleDownClick');
-    if(this.state.y === 3){
-      this.setState({
-        ...this.state,
-        error: "You can't go down"
-      })
-    }else{
-      this.setState({
-        ...this.state,
-        error: '',
-        y: this.state.y +1,
-        steps: this.state.steps+1
-      })
-    }
-  }
-
-  handleLeftClick = () => {
-    console.log('handleLeftClick');
-    if(this.state.x === 1){
-      this.setState({
-        ...this.state,
-        error: "You can't go left"
-      })
-    }else{
-      this.setState({
-        ...this.state,
-        error: '',
-        x: this.state.x -1,
-        steps: this.state.steps+1
-      })
-    }
-  }
-
-  handleRightClick = () => {
-    console.log('handleRightClick');
-    if(this.state.x === 3){
-      this.setState({
-        ...this.state,
-        error: "You can't go right"
-      })
-    }else{
-      this.setState({
-        ...this.state,
-        error: '',
-        x: this.state.x +1,
-        steps: this.state.steps+1
-      })
+  handleClick = e => {
+    switch (e.target.textContent){
+      case 'UP':
+        if(this.state.y === 1){
+          this.setState({
+            ...this.state,
+            error: "You can't go up"
+          })
+        }else{
+          this.setState({
+            ...this.state,
+            error: '',
+            y: this.state.y -1,
+            steps: this.state.steps+1
+          })
+        }
+        break;
+      case 'DOWN':
+        if(this.state.y === 3){
+          this.setState({
+            ...this.state,
+            error: "You can't go down"
+          })
+        }else{
+          this.setState({
+            ...this.state,
+            error: '',
+            y: this.state.y +1,
+            steps: this.state.steps+1
+          })
+        }
+        break;
+      case 'LEFT':
+        if(this.state.x === 1){
+          this.setState({
+            ...this.state,
+            error: "You can't go left"
+          })
+        }else{
+          this.setState({
+            ...this.state,
+            error: '',
+            x: this.state.x -1,
+            steps: this.state.steps+1
+          })
+        }
+        break;
+      case 'RIGHT':
+        if(this.state.x === 3){
+          this.setState({
+            ...this.state,
+            error: "You can't go right"
+          })
+        }else{
+          this.setState({
+            ...this.state,
+            error: '',
+            x: this.state.x +1,
+            steps: this.state.steps+1
+          })
+        }
+        break;
     }
   }
 
   handleReset = () => {
-    console.log('handleReset');
     this.setState(initialState);
   }
 
@@ -150,13 +146,9 @@ export default class AppClass extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log('handleSubmit');
-
-
 
     axios.post('http://localhost:9000/api/result', { x: this.state.x, y: this.state.y, steps: this.state.steps, email: this.state.email })
     .then(resp => {
-      console.log('resp: ', resp)
       this.setState({
         ...this.state,
         error: resp.data.message,
@@ -176,7 +168,6 @@ export default class AppClass extends React.Component {
           error: 'Ouch: email must be a valid email'
         })
       }else{
-      console.log('error: ', error);
       this.setState({
         ...this.state,
         error: `${this.state.email} failure #71`,
@@ -186,7 +177,6 @@ export default class AppClass extends React.Component {
     })
 
   }
-
 
   render() {
     const { className } = this.props
@@ -211,10 +201,10 @@ export default class AppClass extends React.Component {
           <h3 id="message">{this.state.error}</h3>
         </div>
         <div id="keypad">
-          <button onClick={this.handleLeftClick} id="left">LEFT</button>
-          <button onClick={this.handleUpClick} id="up">UP</button>
-          <button onClick={this.handleRightClick} id="right">RIGHT</button>
-          <button onClick={this.handleDownClick} id="down">DOWN</button>
+          <button onClick={this.handleClick} id="left">LEFT</button>
+          <button onClick={this.handleClick} id="up">UP</button>
+          <button onClick={this.handleClick} id="right">RIGHT</button>
+          <button onClick={this.handleClick} id="down">DOWN</button>
           <button onClick={this.handleReset} id="reset">reset</button>
         </div>
         <form>
