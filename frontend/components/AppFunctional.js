@@ -11,7 +11,6 @@ const initialState = {
 export default function AppFunctional(props) {
   
   const [ board, setBoard] = useState(initialState)
-
   const [ error, setError ] = useState('');
 
   const setActive = (x, y) => {
@@ -67,69 +66,64 @@ export default function AppFunctional(props) {
   useEffect(() => {
     setActive(board.x, board.y)
   }, [board])
-  
-  const handleUpClick = () => {
 
-    if(board.y === 1){
-      setError("You can't go up");
-    }else{
-      if(error){
-        setError('');
-      }
-      setBoard({...board,
-        y: board.y -1,
-        steps: board.steps + 1
-      })
-    }
-  }
-
-  const handleDownClick = () => {
-
-    if(board.y === 3){
-      setError("You can't go down");
-    }else{
-      if(error){
-        setError('');
-      }
-      setBoard({...board,
-        y: board.y +1,
-        steps: board.steps + 1
-      })
-    }
-  }
-
-  const handleRightClick = () => {
-
-    if(board.x === 3){
-      setError("You can't go right");
-    }else{
-      if(error){
-        setError('');
-      }
-      setBoard({...board,
-        x: board.x +1,
-        steps: board.steps + 1
-      })
-    }
-  }
-
-  const handleLeftClick = () => {
-    console.log('handleLeftClick');
-    if(board.x === 1){
-      setError("You can't go left");
-    }else{
-      if(error){
-        setError('');
-      }
-      setBoard({...board,
-        x: board.x -1,
-        steps: board.steps + 1
-      })
+  const handleClick = (e) => {
+    switch(e.target.textContent){
+      case 'UP':
+        if(board.y === 1){
+          setError("You can't go up");
+        }else{
+          if(error){
+            setError('');
+          }
+          setBoard({...board,
+            y: board.y -1,
+            steps: board.steps + 1
+          })
+        }
+        break;
+      case 'DOWN':
+        if(board.y === 3){
+          setError("You can't go down");
+        }else{
+          if(error){
+            setError('');
+          }
+          setBoard({...board,
+            y: board.y +1,
+            steps: board.steps + 1
+          })
+        }
+        break;
+      case 'LEFT':
+        if(board.x === 1){
+          setError("You can't go left");
+        }else{
+          if(error){
+            setError('');
+          }
+          setBoard({...board,
+            x: board.x -1,
+            steps: board.steps + 1
+          })
+        }
+        break;
+      case 'RIGHT':
+        if(board.x === 3){
+          setError("You can't go right");
+        }else{
+          if(error){
+            setError('');
+          }
+          setBoard({...board,
+            x: board.x +1,
+            steps: board.steps + 1
+          })
+        }
     }
   }
 
   const handleResetClick = () => {
-    console.log('handleResetClick');
     if(error){
       setError('')
     }
@@ -145,12 +139,9 @@ export default function AppFunctional(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('handleSubmit');
 
     axios.post('http://localhost:9000/api/result', board)
     .then(resp => {
-      console.log('board: ', board)
-      console.log(resp.data.message);
       setError(resp.data.message);
       setBoard({
         ...board,
@@ -165,7 +156,6 @@ export default function AppFunctional(props) {
       }else{
         setError(`${board.email} failure #71`)
       }
-      
     })
   }
 
@@ -190,10 +180,10 @@ export default function AppFunctional(props) {
         <h3 id="message">{error}</h3>
       </div>
       <div id="keypad">
-        <button id="left" onClick={handleLeftClick}>LEFT</button>
-        <button id="up" onClick={handleUpClick}>UP</button>
-        <button id="right" onClick={handleRightClick}>RIGHT</button>
-        <button id="down" onClick={handleDownClick}>DOWN</button>
+        <button id="left" onClick={handleClick}>LEFT</button>
+        <button id="up" onClick={handleClick}>UP</button>
+        <button id="right" onClick={handleClick}>RIGHT</button>
+        <button id="down" onClick={handleClick}>DOWN</button>
         <button id="reset" onClick={handleResetClick}>reset</button>
       </div>
       <form>

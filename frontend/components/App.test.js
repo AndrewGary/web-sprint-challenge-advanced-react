@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import AppFunctional from './AppFunctional';
 import userEvent from '@testing-library/user-event';
-
 
 beforeEach(() => {
   render(<AppFunctional />)
@@ -11,26 +10,13 @@ afterEach(() => {
   document.body.innerHTML = ''
 })
 
-// Write your tests here
-test('sanity', () => {
-  expect(true).toBe(true)
-})
-
 test('renders without errors', () => {
-  //this test is automatic
+  //this test is automatic because of the beforeEach() function
 })
 
-describe(`Checking to see if coordinates display correctly`, () => {
-
-  // up = document.querySelector('#up')
-  // down = document.querySelector('#down')
-  // left = document.querySelector('#left')
-  // right = document.querySelector('#right')
-  // reset = document.querySelector('#reset')
-  // submit = document.querySelector('#submit')
+describe(`Checking to see if coordinates, and steps display correctly`, () => {
   
   test('initial render has correct coordinates', () => {
-
     const coord = screen.getByText('Coordinates: (2, 2)')
     expect(coord).toBeTruthy();
   })
@@ -67,3 +53,31 @@ describe(`Checking to see if coordinates display correctly`, () => {
 
 })
 
+test('Testing to see if input changes when something is typed into it', () => {
+  
+  const email = screen.getByPlaceholderText('type email')
+
+  userEvent.type(email, 'asdf')
+
+  expect(email.value).toEqual('asdf');
+})
+
+test('testing submit button with no email', () => {
+  const button = document.querySelector('#submit');
+
+  userEvent.click(button);
+
+  const error = screen.findByText('Ouch: email is required')
+  expect(error).toBeTruthy();
+})
+
+test('testing a submission of andrew@gmail', () => {
+  const email = document.querySelector('#email');
+  const button = document.querySelector('#submit');
+
+  userEvent.type(email, 'andrew@gmail')
+  userEvent.click(button);
+
+  const error = screen.findByText('Ouch: email must be a valid email')
+  expect(error).toBeTruthy()
+})
